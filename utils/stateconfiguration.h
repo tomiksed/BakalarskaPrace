@@ -20,7 +20,7 @@ public:
 
     QList<dLine_t *> *boundaryLines;
 
-    QList<dLine_t *> manipulationLines;
+    QList<dLine_t *> *manipulationLines;
 
     QPolygonF boundary;
 

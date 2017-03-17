@@ -24,6 +24,7 @@ protected:
     void drawPoints(QPainter &painter, double dimx, double dimy);
     void drawTriangles(QPainter &painter, double dimx, double dimy);
     void drawBoundary(QPainter &painter, double dimx, double dimy);
+    void drawManipulationLines(QPainter &painter, double dimx, double dimy);
 };
 
 #endif // POINTSVIEW_H

@@ -24,6 +24,7 @@ private:
     static void loadPoints(QTextStream &in, StateConfiguration *config);
     static void loadTriangles(QTextStream &in, StateConfiguration *config);
     static void loadBoundaries(QTextStream &in, StateConfiguration *config);
+    static void loadManipulationLines(QTextStream &in, StateConfiguration *config);
 
 signals:
 

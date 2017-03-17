@@ -30,6 +30,9 @@ void PointsView::paintEvent(QPaintEvent *) {
         if (!this->config->boundaryLines->empty()) {
             this->drawBoundary(painter, dimx, dimy);
         }
+        if (!this->config->manipulationLines->empty()) {
+            this->drawManipulationLines(painter, dimx, dimy);
+        }
 
 
         this->drawPoints(painter, dimx, dimy);
@@ -89,6 +92,17 @@ void PointsView::drawBoundary(QPainter &painter, double dimx, double dimy) {
     painter.setPen(Qt::red);
 
     for (dLine_t *l : *this->config->boundaryLines) {
+        painter.drawLine((int) round(((this->width() - dimx) / 2) + ((l->x1 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
+                         (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         (int) round(((this->width() - dimx) / 2) + ((l->x2 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
+                         (int) round(((this->height() - dimy) / 2) + ((l->y2 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+    }
+}
+
+void PointsView::drawManipulationLines(QPainter &painter, double dimx, double dimy) {
+    painter.setPen(Qt::blue);
+
+    for (dLine_t *l : *this->config->manipulationLines) {
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((l->x1 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
                          (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((l->x2 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),

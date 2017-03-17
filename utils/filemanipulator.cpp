@@ -22,6 +22,8 @@ StateConfiguration *FileManipulator::loadContentsOfFile(QString *fileName) {
 
     FileManipulator::loadBoundaries(in, config);
 
+    FileManipulator::loadManipulationLines(in, config);
+
     file.close();
 
     return config;
@@ -165,6 +167,38 @@ void FileManipulator::loadBoundaries(QTextStream &in, StateConfiguration *config
                                                config->originalPoints->at(2818)->x, config->originalPoints->at(2818)->y});
     config->originalPoints->at(123)->movable = false;
     config->originalPoints->at(2818)->movable = false;
+}
+
+void FileManipulator::loadManipulationLines(QTextStream &in, StateConfiguration *config) {
+    QString line = in.readLine();
+    QStringList fields;
+
+    int numberOfBounaryLines = line.toInt();
+
+    for (int i = 0; i < numberOfBounaryLines; i++) {
+        line = in.readLine().trimmed();
+        line.replace("\t", " ");
+        line.replace("   ", " ");
+        line.replace("   ", " ");
+        line.replace("  ", " ");
+        line.replace("  ", " ");
+
+        fields = line.split(" ");
+
+        for (int j = 0; j < fields.count() - 1; j++) {
+            int ip1 = fields.at(j).toInt();
+            int ip2 = fields.at(j + 1).toInt();
+
+            point_t *p1 = config->points->at(ip1);
+            p1->movable = false;
+            point_t *p2 = config->points->at(ip2);
+            p2->movable = false;
+
+            dLine_t *line = new dLine_t {p1->x, p1->y, p2->x, p2->y};
+
+            config->manipulationLines->append(line);
+        }
+    }
 }
 
 void FileManipulator::savePointsToFile(QString *fileName, StateConfiguration *config) {

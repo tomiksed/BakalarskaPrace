@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openClicked()));
     connect(ui->actionCVT, SIGNAL(triggered()), this, SLOT(CVTClicked()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveClicked()));
+    connect(ui->actionCVT_with_line, SIGNAL(triggered()), this, SLOT(CVTWithLineClicked()));
 
     connect(ui->actionRecalculate_z_coordinate, SIGNAL(triggered()), this, SLOT(recalculateZClicked()));
 }
@@ -20,7 +21,13 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::CVTClicked() {
-    PointMover::proceedCVT(this->ui->centralWidget->config, 1000);
+    PointMover::proceedCVT(this->ui->centralWidget->config, 1000, false);
+
+    this->repaint();
+}
+
+void MainWindow::CVTWithLineClicked() {
+    PointMover::proceedCVT(this->ui->centralWidget->config, 1000, true);
 
     this->repaint();
 }

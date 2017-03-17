@@ -1,4 +1,5 @@
 #include "pointmover.h"
+#include <math.h>
 #include <QDebug>
 
 PointMover::PointMover(QObject *parent) : QObject(parent) {
@@ -17,6 +18,38 @@ point_t *generateRandomPointForNormalCVT(StateConfiguration *config) {
 
     return Utilities::createPointWithCoordinates(x, y, 0.);
 }
+
+point_t *generateRandomPointFromLine(StateConfiguration *config) {
+    double rand_max = static_cast<double>(RAND_MAX);
+
+    double totalLength = 0.;
+    for (dLine_t *line : *config->manipulationLines) {
+        totalLength += sqrt((line->x1 + line->x2) * (line->y1 + line->y2));
+    }
+
+    double pos = rand() / rand_max;
+
+    double actual_distance = 0., line_length;
+    double point_position = pos * totalLength;
+
+    for (dLine_t *line : *config->manipulationLines) {
+        line_length = sqrt((line->x1 + line->x2) * (line->y1 + line->y2));
+
+        if (actual_distance + line_length > point_position) {
+            double rest = point_position - actual_distance;
+
+            double rel_pos = rest / line_length;
+
+            double new_x = line->x1 +  (( line->x2 - line->x1) * rel_pos);
+            double new_y = line->y1 +  (( line->y2 - line->y1) * rel_pos);
+
+            return Utilities::createPointWithCoordinates(new_x, new_y, 0.);
+        } else {
+            actual_distance += line_length;
+        }
+    }
+}
+
 #include <limits>
 point_t *findNearestPoint(QList<point_t *> *movablePoints, point_t *generated) {
     point_t *nearest;
@@ -58,7 +91,7 @@ bool isInBoundingPolygon(point_t *p, StateConfiguration *config) {
     return !(numberOfIntersections % 2 == 0);
 }
 
-void PointMover::proceedCVT(StateConfiguration *config, int numberOfIterations) {
+void PointMover::proceedCVT(StateConfiguration *config, int numberOfIterations, bool useLine) {
     QList<point_t *> *movable_points = new QList<point_t *>();
 
     for (point_t *p : *config->points) {
@@ -69,9 +102,14 @@ void PointMover::proceedCVT(StateConfiguration *config, int numberOfIterations) 
     int iterationsDone = 0;
 
     while (iterationsDone < numberOfIterations) {
-        point_t *generated = generateRandomPointForNormalCVT(config);
+        point_t *generated;
+        if (useLine) {
+            generated = generateRandomPointFromLine(config);
+        } else {
+            generated = generateRandomPointForNormalCVT(config);
+        }
 
-        if (!isInBoundingPolygon(generated, config)) {
+        if (!useLine && !isInBoundingPolygon(generated, config)) {
             continue;
         }
 

@@ -31,6 +31,7 @@ public slots:
     void openClicked();
     void saveClicked();
     void CVTClicked();
+    void CVTWithLineClicked();
 
     void recalculateZClicked();
 };

@@ -8,4 +8,6 @@ StateConfiguration::StateConfiguration(QObject *parent) : QObject(parent)
     this->originalTriangles = new QList<triangle_t *>();
 
     this->boundaryLines = new QList<dLine_t *>();
+
+    this->manipulationLines = new QList<dLine_t *>();
 }

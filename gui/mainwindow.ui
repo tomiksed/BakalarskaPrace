@@ -35,6 +35,7 @@
      <string>Processing</string>
     </property>
     <addaction name="actionCVT"/>
+    <addaction name="actionCVT_with_line"/>
     <addaction name="separator"/>
     <addaction name="actionRecalculate_z_coordinate"/>
    </widget>
@@ -68,6 +69,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionCVT_with_line">
+   <property name="text">
+    <string>CVT with line</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
    </property>
   </action>
  </widget>
