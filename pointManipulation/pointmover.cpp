@@ -91,17 +91,17 @@ bool isInBoundingPolygon(point_t *p, StateConfiguration *config) {
     return !(numberOfIntersections % 2 == 0);
 }
 
-void PointMover::proceedCVT(StateConfiguration *config, int numberOfIterations, bool useLine) {
-    QList<point_t *> *movable_points = new QList<point_t *>();
+void PointMover::proceedCVT(StateConfiguration *config, bool useLine) {
+    QList<point_t *> *movablePoints = new QList<point_t *>();
 
     for (point_t *p : *config->points) {
         if (p->movable && p->selected)
-            movable_points->append(p);
+            movablePoints->append(p);
     }
 
     int iterationsDone = 0;
 
-    while (iterationsDone < numberOfIterations) {
+    while (iterationsDone < config->numberOfIterations) {
         point_t *generated;
         if (useLine) {
             generated = generateRandomPointFromLine(config);
@@ -116,7 +116,7 @@ void PointMover::proceedCVT(StateConfiguration *config, int numberOfIterations, 
         /*generated->movable = false;
         config->points->append(generated);*/
 
-        point_t *nearest  = findNearestPoint(movable_points, generated);
+        point_t *nearest  = findNearestPoint(movablePoints, generated);
         nearest->x = ((generated->x + (nearest->x * nearest->timesMoved)) / (nearest->timesMoved + 1));
         nearest->y = ((generated->y + (nearest->y * nearest->timesMoved)) / (nearest->timesMoved + 1));
 

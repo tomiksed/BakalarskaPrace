@@ -11,6 +11,7 @@ point_t *Utilities::createEmptyPoint() {
     p->triangle = nullptr;
     p->movable = true;
     p->selected = true;
+    p->onManipulationLine = false;
 
     p->timesMoved = 0;
 

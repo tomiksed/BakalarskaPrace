@@ -10,4 +10,6 @@ StateConfiguration::StateConfiguration(QObject *parent) : QObject(parent)
     this->boundaryLines = new QList<dLine_t *>();
 
     this->manipulationLines = new QList<dLine_t *>();
+
+    this->numberOfIterations = NUMBER_OF_ITERATIONS_DEFAULT;
 }

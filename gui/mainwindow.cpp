@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionCVT, SIGNAL(triggered()), this, SLOT(CVTClicked()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveClicked()));
     connect(ui->actionCVT_with_line, SIGNAL(triggered()), this, SLOT(CVTWithLineClicked()));
+    connect(ui->actionNumber_of_iterations, SIGNAL(triggered()), this, SLOT(numberOfIterationsClicked()));
+    connect(ui->actionReset_move_counter, SIGNAL(triggered()), this, SLOT(resetMoveCounterClicked()));
 
     connect(ui->actionRecalculate_z_coordinate, SIGNAL(triggered()), this, SLOT(recalculateZClicked()));
 }
@@ -21,13 +23,13 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::CVTClicked() {
-    PointMover::proceedCVT(this->ui->centralWidget->config, 1000, false);
+    PointMover::proceedCVT(this->ui->centralWidget->config, false);
 
     this->repaint();
 }
 
 void MainWindow::CVTWithLineClicked() {
-    PointMover::proceedCVT(this->ui->centralWidget->config, 1000, true);
+    PointMover::proceedCVT(this->ui->centralWidget->config, true);
 
     this->repaint();
 }
@@ -46,6 +48,9 @@ void MainWindow::openClicked() {
     }
 
     this->ui->centralWidget->config = config;
+
+    this->setWindowTitle(fileName);
+
     this->repaint();
 }
 
@@ -60,4 +65,21 @@ void MainWindow::saveClicked() {
 
 void MainWindow::recalculateZClicked() {
     Utilities::recalculateZCoordinates(this->ui->centralWidget->config);
+}
+
+void MainWindow::numberOfIterationsClicked() {
+    bool ok;
+    int numberOfIterations = QInputDialog::getInt(this, "Number of iterations",
+                                                "Enter number of iterations to be performed",
+                                                this->ui->centralWidget->config->numberOfIterations, 1, 1000000, 1, &ok);
+
+    if (ok) {
+        this->ui->centralWidget->config->numberOfIterations = numberOfIterations;
+    }
+}
+
+void MainWindow::resetMoveCounterClicked() {
+    for (point_t *p : *this->ui->centralWidget->config->points) {
+        p->timesMoved = 0;
+    }
 }

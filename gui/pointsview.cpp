@@ -11,7 +11,6 @@ void PointsView::paintEvent(QPaintEvent *) {
 
     painter.setPen(Qt::black);
     painter.setBrush(Qt::SolidPattern);
-    //painter.drawRect(0, 0, this->width(), this->height());
 
     painter.fillRect(0, 0, this->width(), this->height(), Qt::GlobalColor::white);
 
@@ -48,24 +47,24 @@ void PointsView::drawPoints(QPainter &painter, double dimx, double dimy) {
                 painter.setPen(Qt::blue);
             }
             painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                              (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                              this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
             painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx + 1),
-                              (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                              this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
             painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx),
-                              (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy - 1));
+                              this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy - 1));
             painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx),
-                              (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy + 1));
+                              this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy + 1));
 
 
-            /*painter.drawText((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                                   (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+            /*if (p->onManipulationLine) painter.drawText((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
+                                   this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                                    QString::number(p->index));*/
         } else {
             painter.setPen(Qt::red);
         }
 
         painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx),
-                          (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                          this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
     }
 }
 
@@ -74,17 +73,17 @@ void PointsView::drawTriangles(QPainter &painter, double dimx, double dimy) {
 
     for (triangle_t *t : *this->config->originalTriangles) {
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((t->p1->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p1->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p1->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((t->p2->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p2->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p2->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((t->p2->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p2->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p2->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((t->p3->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p3->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p3->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((t->p3->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p3->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p3->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((t->p1->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((t->p1->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((t->p1->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
     }
 }
 
@@ -93,9 +92,9 @@ void PointsView::drawBoundary(QPainter &painter, double dimx, double dimy) {
 
     for (dLine_t *l : *this->config->boundaryLines) {
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((l->x1 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((l->x2 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((l->y2 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((l->y2 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
     }
 }
 
@@ -104,8 +103,8 @@ void PointsView::drawManipulationLines(QPainter &painter, double dimx, double di
 
     for (dLine_t *l : *this->config->manipulationLines) {
         painter.drawLine((int) round(((this->width() - dimx) / 2) + ((l->x1 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((l->y1 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
                          (int) round(((this->width() - dimx) / 2) + ((l->x2 - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                         (int) round(((this->height() - dimy) / 2) + ((l->y2 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
+                         this->height() - (int) round(((this->height() - dimy) / 2) + ((l->y2 - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy));
     }
 }

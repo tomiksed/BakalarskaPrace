@@ -17,6 +17,7 @@ struct point_t {
 
     bool movable;
     bool selected;
+    bool onManipulationLine;
 
     /* What triangle the point is inside */
     struct triangle_t *triangle;

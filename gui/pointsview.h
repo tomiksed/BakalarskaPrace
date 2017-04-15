@@ -21,6 +21,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *);
 
+private:
     void drawPoints(QPainter &painter, double dimx, double dimy);
     void drawTriangles(QPainter &painter, double dimx, double dimy);
     void drawBoundary(QPainter &painter, double dimx, double dimy);

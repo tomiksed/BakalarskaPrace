@@ -17,7 +17,7 @@ class PointMover : public QObject
 public:
     explicit PointMover(QObject *parent = 0);
 
-    static void proceedCVT(StateConfiguration *config, int numberOfIterations, bool useLine);
+    static void proceedCVT(StateConfiguration *config, bool useLine);
 
 signals:
 

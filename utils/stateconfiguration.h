@@ -26,6 +26,8 @@ public:
 
     double xmin, ymin, xmax, ymax;
 
+    int numberOfIterations;
+
 signals:
 
 public slots:
