@@ -141,7 +141,8 @@ void FileManipulator::loadBoundaries(QTextStream &in, StateConfiguration *config
 
             config->points->at(t->p2->index)->movable = false;
             config->points->at(t->p3->index)->movable = false;
-        } else if (t2 == -1) {
+        }
+        if (t2 == -1) {
             triangle_t *t = config->originalTriangles->at(i);
 
             config->boundaryLines->append(new dLine_t {t->p1->x, t->p1->y, t->p3->x, t->p3->y});
@@ -150,7 +151,8 @@ void FileManipulator::loadBoundaries(QTextStream &in, StateConfiguration *config
 
             config->points->at(t->p1->index)->movable = false;
             config->points->at(t->p3->index)->movable = false;
-        } else if (t3 == -1) {
+        }
+        if (t3 == -1) {
             triangle_t *t = config->originalTriangles->at(i);
 
             config->boundaryLines->append(new dLine_t {t->p2->x, t->p2->y, t->p1->x, t->p1->y});
@@ -163,10 +165,10 @@ void FileManipulator::loadBoundaries(QTextStream &in, StateConfiguration *config
     }
 
     // ooo - Error correction
-   /* config->boundaryLines->append(new dLine_t {config->originalPoints->at(123)->x, config->originalPoints->at(123)->y,
+    /*config->boundaryLines->append(new dLine_t {config->originalPoints->at(123)->x, config->originalPoints->at(123)->y,
                                                config->originalPoints->at(2818)->x, config->originalPoints->at(2818)->y});
     config->originalPoints->at(123)->movable = false;
-    config->originalPoints->at(2818)->movable = false; */
+    config->originalPoints->at(2818)->movable = false;*/
 }
 
 void FileManipulator::loadManipulationLines(QTextStream &in, StateConfiguration *config) {
