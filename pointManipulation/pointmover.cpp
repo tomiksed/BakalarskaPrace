@@ -6,7 +6,7 @@ PointMover::PointMover(QObject *parent) : QObject(parent) {
 
 }
 
-/* Odprasit */
+/* Generates random point in the bounding box of the data */
 point_t *generateRandomPointForNormalCVT(StateConfiguration *config) {
     double max_rand = static_cast<double>(RAND_MAX);
 
@@ -19,22 +19,27 @@ point_t *generateRandomPointForNormalCVT(StateConfiguration *config) {
     return Utilities::createPointWithCoordinates(x, y, 0.);
 }
 
+/* Generates random point on the manipulationLines */
 point_t *generateRandomPointFromLine(StateConfiguration *config) {
     double rand_max = static_cast<double>(RAND_MAX);
 
+    /* Calculates total length */
     double totalLength = 0.;
     for (dLine_t *line : *config->manipulationLines) {
         totalLength += sqrt((line->x1 + line->x2) * (line->y1 + line->y2));
     }
 
+    /* Select random number from the total length range */
     double pos = rand() / rand_max;
 
     double actual_distance = 0., line_length;
     double point_position = pos * totalLength;
 
+    /* Finds what line is on that length */
     for (dLine_t *line : *config->manipulationLines) {
         line_length = sqrt((line->x1 + line->x2) * (line->y1 + line->y2));
 
+        /* And creates point on that line */
         if (actual_distance + line_length > point_position) {
             double rest = point_position - actual_distance;
 
@@ -51,6 +56,7 @@ point_t *generateRandomPointFromLine(StateConfiguration *config) {
 }
 
 #include <limits>
+/* Finds nearest point from the list to the generated point */
 point_t *findNearestPoint(QList<point_t *> *movablePoints, point_t *generated) {
     point_t *nearest;
     double dist_min = std::numeric_limits<double>::max(), actual_dist;
@@ -77,7 +83,14 @@ bool doIntersect(dLine_t *l1, dLine_t *l2) {
     }
 }
 
+/* Detects whether the generated point is in the non-convex polygon
+ * using ray casting algorithm
+ */
 bool isInBoundingPolygon(point_t *p, StateConfiguration *config) {
+    if (config->boundaryLines->empty()) {
+        return true;
+    }
+
     QLineF l2(config->xmin - 1., p->y, p->x, p->y);
     int numberOfIntersections = 0;
     for (dLine_t *b : *config->boundaryLines) {
@@ -112,9 +125,6 @@ void PointMover::proceedCVT(StateConfiguration *config, bool useLine) {
         if (!useLine && !isInBoundingPolygon(generated, config)) {
             continue;
         }
-
-        /*generated->movable = false;
-        config->points->append(generated);*/
 
         point_t *nearest  = findNearestPoint(movablePoints, generated);
         nearest->x = ((generated->x + (nearest->x * nearest->timesMoved)) / (nearest->timesMoved + 1));

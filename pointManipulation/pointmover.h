@@ -11,12 +11,16 @@
 #include "../utils/stateconfiguration.h"
 #include "../utils/utilities.h"
 
+/*
+ * Class that manipulates with the points
+ */
 class PointMover : public QObject
 {
     Q_OBJECT
 public:
     explicit PointMover(QObject *parent = 0);
 
+    /* Method for processing the data using CVT */
     static void proceedCVT(StateConfiguration *config, bool useLine);
 
 signals:

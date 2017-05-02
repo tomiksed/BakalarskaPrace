@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    /* Connecting actions with according methods */
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openClicked()));
     connect(ui->actionCVT, SIGNAL(triggered()), this, SLOT(CVTClicked()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveClicked()));
@@ -23,15 +24,42 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::CVTClicked() {
-    PointMover::proceedCVT(this->ui->centralWidget->config, false);
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty()) {
 
-    this->repaint();
+
+
+        PointMover::proceedCVT(this->ui->centralWidget->config, false);
+
+        this->repaint();
+    } else {
+        QMessageBox mess;
+        mess.setText("There are no points!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
+    }
 }
 
 void MainWindow::CVTWithLineClicked() {
-    PointMover::proceedCVT(this->ui->centralWidget->config, true);
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty() &&
+            this->ui->centralWidget->config->manipulationLines != nullptr &&
+            !this->ui->centralWidget->config->manipulationLines->empty()) {
 
-    this->repaint();
+
+        PointMover::proceedCVT(this->ui->centralWidget->config, true);
+
+        this->repaint();
+    } else {
+        QMessageBox mess;
+        mess.setText("There are no points or lines!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
+    }
 }
 
 void MainWindow::openClicked() {
@@ -39,7 +67,6 @@ void MainWindow::openClicked() {
                                                     "Open points", QDir::currentPath(),
                                                     "Point Files (*.dat *.txt)");
 
-//QString f("/Users/justme/Downloads/DTbotannonconvex.dat");
     StateConfiguration *config = FileManipulator::loadContentsOfFile(&fileName);
 
     if (config == nullptr) {
@@ -55,31 +82,76 @@ void MainWindow::openClicked() {
 }
 
 void MainWindow::saveClicked() {
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                                    "Save points", QDir::currentPath(),
-                                                    "Point Files (*.dat *.txt)");
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty()) {
 
-//QString f("/Users/justme/Documents/output.dat");
-    FileManipulator::savePointsToFile(&fileName, this->ui->centralWidget->config);
+        QString fileName = QFileDialog::getSaveFileName(this,
+                                                        "Save points", QDir::currentPath(),
+                                                        "Point Files (*.dat *.txt)");
+        FileManipulator::savePointsToFile(&fileName, this->ui->centralWidget->config);
+    } else {
+        QMessageBox mess;
+        mess.setText("No points to save!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
+    }
 }
 
 void MainWindow::recalculateZClicked() {
-    Utilities::recalculateZCoordinates(this->ui->centralWidget->config);
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty() &&
+            this->ui->centralWidget->config->originalTriangles != nullptr &&
+            !this->ui->centralWidget->config->originalTriangles->empty()) {
+
+
+        Utilities::recalculateZCoordinates(this->ui->centralWidget->config);
+    } else {
+        QMessageBox mess;
+        mess.setText("Not enough data!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
+    }
 }
 
 void MainWindow::numberOfIterationsClicked() {
-    bool ok;
-    int numberOfIterations = QInputDialog::getInt(this, "Number of iterations",
-                                                "Enter number of iterations to be performed",
-                                                this->ui->centralWidget->config->numberOfIterations, 1, 1000000, 1, &ok);
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty()) {
 
-    if (ok) {
-        this->ui->centralWidget->config->numberOfIterations = numberOfIterations;
+        bool ok;
+        int numberOfIterations = QInputDialog::getInt(this, "Number of iterations",
+                                                    "Enter number of iterations to be performed",
+                                                    this->ui->centralWidget->config->numberOfIterations, 1, 1000000, 1, &ok);
+
+        if (ok) {
+            this->ui->centralWidget->config->numberOfIterations = numberOfIterations;
+        }
+    } else {
+        QMessageBox mess;
+        mess.setText("Load data first!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
     }
 }
 
 void MainWindow::resetMoveCounterClicked() {
-    for (point_t *p : *this->ui->centralWidget->config->points) {
-        p->timesMoved = 0;
+    if (this->ui->centralWidget->config != nullptr &&
+            this->ui->centralWidget->config->points != nullptr &&
+            !this->ui->centralWidget->config->points->empty()) {
+
+        for (point_t *p : *this->ui->centralWidget->config->points) {
+            p->timesMoved = 0;
+        }
+    } else {
+        QMessageBox mess;
+        mess.setText("Load data first!");
+        mess.setIcon(QMessageBox::Critical);
+        mess.addButton(QMessageBox::Ok);
+        mess.exec();
     }
 }

@@ -1,5 +1,6 @@
 #include "filemanipulator.h"
 #include <QDebug>
+#include <QFile>
 
 FileManipulator::FileManipulator(QObject *parent) : QObject(parent) {
 
@@ -13,17 +14,17 @@ StateConfiguration *FileManipulator::loadContentsOfFile(QString *fileName) {
     }
 
     StateConfiguration *config = new StateConfiguration();
-qDebug() << "Opening input stream";
+
     QTextStream in(&file);
-qDebug() << "Loading points";
+
     FileManipulator::loadPoints(in, config);
-qDebug() << "Loading triangles";
+
     FileManipulator::loadTriangles(in, config);
-qDebug() << "Loading boundaries";
+
     FileManipulator::loadBoundaries(in, config);
-qDebug() << "Loading manipulation lines";
+
     FileManipulator::loadManipulationLines(in, config);
-qDebug() << "Closing file";
+
     file.close();
 
     return config;
@@ -163,12 +164,6 @@ void FileManipulator::loadBoundaries(QTextStream &in, StateConfiguration *config
             config->points->at(t->p1->index)->movable = false;
         }
     }
-
-    // ooo - Error correction
-    /*config->boundaryLines->append(new dLine_t {config->originalPoints->at(123)->x, config->originalPoints->at(123)->y,
-                                               config->originalPoints->at(2818)->x, config->originalPoints->at(2818)->y});
-    config->originalPoints->at(123)->movable = false;
-    config->originalPoints->at(2818)->movable = false;*/
 }
 
 void FileManipulator::loadManipulationLines(QTextStream &in, StateConfiguration *config) {
@@ -220,17 +215,6 @@ void FileManipulator::savePointsToFile(QString *fileName, StateConfiguration *co
     }
 
     out.flush();
-
-    /* Printing original triangle indexes */
- /*   int numberOfTriangles = config->originalTriangles->count();
-    out << QString::number(numberOfTriangles) << '\n';
-    for (triangle_t *t : *config->originalTriangles) {
-        out << QString::number(t->p1->index) << " "
-            << QString::number(t->p2->index) << " "
-            << QString::number(t->p3->index) << '\n';
-    }
-
-    out.flush(); */
 
     file.close();
 }

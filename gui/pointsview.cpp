@@ -18,6 +18,7 @@ void PointsView::paintEvent(QPaintEvent *) {
         double first = ((double) this->width() - 20) / (config->xmax - config->xmin);
         double second = ((double) this->height() - 20) / (config->ymax - config->ymin);
 
+        /* To fit the data bouding box into the window */
         double scale = MIN(first, second);
 
         double dimx = scale * (config->xmax - config->xmin);
@@ -54,11 +55,6 @@ void PointsView::drawPoints(QPainter &painter, double dimx, double dimy) {
                               this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy - 1));
             painter.drawPoint((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx),
                               this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy + 1));
-
-
-            /*if (p->onManipulationLine) painter.drawText((int) round(((this->width() - dimx) / 2) + ((p->x - this->config->xmin) / (this->config->xmax - this->config->xmin)) * dimx - 1),
-                                   this->height() - (int) round(((this->height() - dimy) / 2) + ((p->y - this->config->ymin) / (this->config->ymax - this->config->ymin)) * dimy),
-                                   QString::number(p->index));*/
         } else {
             painter.setPen(Qt::red);
         }

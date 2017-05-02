@@ -57,10 +57,6 @@ void Utilities::recalculateZCoordinates(StateConfiguration *config) {
             if (p->movable) {
                 QPointF test(p->x, p->y);
                 if (poly.containsPoint(test, Qt::OddEvenFill)) {
-                    /*qDebug() << "Point" << p->x << ":" << p->y << "lies in triangle:"
-                             << t->p1->x << ":" << t->p1->y << ":" << t->p1->z << ", "
-                             << t->p2->x << ":" << t->p2->y << ":" << t->p2->z << ", "
-                             << t->p3->x << ":" << t->p3->y << ":"  << t->p3->z;*/
 
                     ta = calculateArea(t->p1, t->p2, t->p3);
                     w1 = calculateArea(p, t->p2, t->p3) / ta;
@@ -68,8 +64,6 @@ void Utilities::recalculateZCoordinates(StateConfiguration *config) {
                     w3 = calculateArea(p, t->p1, t->p2) / ta;
 
                     p->z = w1 * t->p1->z + w2 * t->p2->z + w3 * t->p3->z;
-
-                    //qDebug() << "Point's z is:" << p->z;
                 }
             }
         }

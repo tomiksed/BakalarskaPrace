@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bakalarska prace</string>
   </property>
   <widget class="PointsView" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">

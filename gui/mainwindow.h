@@ -17,6 +17,9 @@ namespace Ui {
 class MainWindow;
 }
 
+/*
+ * Class representing the main window
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -29,7 +32,7 @@ private:
     Ui::MainWindow *ui;
 
 public slots:
-    /* File section */
+    /* File section - loading and opening data */
     void openClicked();
     void saveClicked();
 
